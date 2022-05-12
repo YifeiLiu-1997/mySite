@@ -1,25 +1,50 @@
 import logo from './logo.svg';
 import './App.css';
+import React from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component {
+    state = {
+        userName: ''
+    }
+
+    fetchLogin = (info) => {
+        const infoJSON = {
+            user: info
+        }
+        console.log(infoJSON)
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+            body: JSON.stringify(infoJSON),
+        }).then((res) => {
+            if (res.code === '0000'){
+                return (
+                    <div>
+                        {res}
+                    </div>
+                )
+            }
+        })
+    }
+
+    getUserName = (e) => {
+        this.setState({
+            userName: e.target.value
+        })
+    }
+
+    render() {
+        return (
+            <div className="App">
+                <input type="text" onChange={this.getUserName}/>
+                <button onClick={() => this.fetchLogin(this.state.userName)}>点击</button>
+            </div>
+        )
+    }
 }
 
 export default App;
